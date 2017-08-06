@@ -66,25 +66,27 @@ public class CamelConfiguration {
         return mapping;
     }
 
-    @Bean
-    public Tracer tracer() {
-        String jaegerURL = System.getenv("JAEGER_SERVER_HOSTNAME");
-        if (jaegerURL != null) {
-            log.info("Using Jaeger tracer");
-            return jaegerTracer(jaegerURL);
-        }
-
-        log.info("Using Noop tracer");
-        return NoopTracerFactory.create();
-    }
-
-
-    private Tracer jaegerTracer(String url) {
-        Sender sender = new UdpSender(url, 0, 0);
-        return new com.uber.jaeger.Tracer.Builder("api-gateway",
-                new RemoteReporter(sender, 100, 50,
-                        new Metrics(new StatsFactoryImpl(new NullStatsReporter()))),
-                new ProbabilisticSampler(1.0))
-                .build();
-    }
+// START - BEFORE ISTIO
+//    @Bean
+//    public Tracer tracer() {
+//        String jaegerURL = System.getenv("JAEGER_SERVER_HOSTNAME");
+//        if (jaegerURL != null) {
+//            log.info("Using Jaeger tracer");
+//            return jaegerTracer(jaegerURL);
+//        }
+//
+//        log.info("Using Noop tracer");
+//        return NoopTracerFactory.create();
+//    }
+//
+//
+//    private Tracer jaegerTracer(String url) {
+//        Sender sender = new UdpSender(url, 0, 0);
+//        return new com.uber.jaeger.Tracer.Builder("api-gateway",
+//                new RemoteReporter(sender, 100, 50,
+//                        new Metrics(new StatsFactoryImpl(new NullStatsReporter()))),
+//                new ProbabilisticSampler(1.0))
+//                .build();
+//    }
+// END - BEFORE ISTIO
 }

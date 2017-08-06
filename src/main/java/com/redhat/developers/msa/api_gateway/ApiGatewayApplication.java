@@ -24,7 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@CamelOpenTracing
+//@CamelOpenTracing
 public class ApiGatewayApplication {
 
     public static void main(String[] args) {

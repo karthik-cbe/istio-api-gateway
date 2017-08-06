@@ -21,18 +21,13 @@
 
 	<groupId>com.redhat.developers.msa.api-gateway</groupId>
 	<artifactId>api-gateway</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>api-gateway</name>
 	<description>API Gateway using Feign and Hystrix</description>
 
 	<properties>
-		<!-- Explicitly declaring the source encoding eliminates the following
-			message: -->
-		<!-- [WARNING] Using platform encoding (UTF-8 actually) to copy filtered
-			resources, i.e. build is platform dependent! -->
-
 		<!-- maven-compiler-plugin -->
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -45,8 +40,11 @@
 		<io.opentracing.version>0.22.0</io.opentracing.version>
 
 		<!-- fabric8 version -->
-		<fabric8.version>2.2.105</fabric8.version>
-		<docker.maven.plugin.version>0.15.8</docker.maven.plugin.version>
+		<fabric8-maven-plugin.version>3.5.22</fabric8-maven-plugin.version>
+
+		<!-- The docker image name -->
+		<fabric8.generator.name>${project.artifactId}:${project.version}</fabric8.generator.name>
+
 	</properties>
 
 	<dependencyManagement>
@@ -122,6 +120,11 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+
 		<!-- Swagger -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -151,6 +154,43 @@
 					</execution>
 				</executions>
 			</plugin>
+      <!-- fabric8 maven plugin -->
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>fabric8-maven-plugin</artifactId>
+        <version>${fabric8-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>istioctl</executable>
+          <workingDirectory>${basedir}/src/istio</workingDirectory>
+          <arguments>
+            <argument>kube-inject</argument>
+            <argument>-f</argument>
+            <argument>api-gateway.yaml</argument>
+            <argument>-o</argument>
+            <argument>istio-api-gateway.yaml</argument>
+          </arguments>
+        </configuration>
+      </plugin>
 		</plugins>
 	</build>
 
