@@ -44,28 +44,30 @@ each request that needs to be traced:
 _*WIP*_
 
 
-== Build and Deploy
+[build-and-deploy]]
+==  Building and Deploying
+
+[[build]]
+=== Build
+[code,sh]
+----
+./mvnw clean install
+----
+
+[[deploy]]
+=== Deploy
+
+The build above should create the required kubernetes manifests that allows to deploy the service in Istio Service Mesh.
+All the files will be located in the *target* directory of the project
 
 [code,sh]
 ----
 
-mvn clean package fabric8:build <1>
-
-mvn exec:exec <2>
-
-kubectl -f src/istio/istio-ola.yaml <3>
+kubectl apply -f /target/istio/isito-api-gateway.yaml <1>
 
 ----
 
-<1> build the application docker image
-<2> the _kube-inject_ i.e. injecting the Istio related init-containers and
-sidecars in to the kubernetes deployment yaml found in link:./src/istio/api-gateway.yaml[api-gateway.yaml]
-<3> Deploying application on to Kubernetes
-
-[NOTE]
-====
-you can find a istio kube-injected yaml in link:./src/istio/istio-api-gateway.yaml[istio-api-gateway.yaml]
-====
+<1> Deploy the api-gateway in to kubernetes cluster and create the _api-gateway_ service
 
 == References
 
