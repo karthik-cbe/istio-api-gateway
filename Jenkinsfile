@@ -9,7 +9,7 @@ node("mavennexusistio") {
             echo "Using project ${openshift.project()} in cluster with url ${openshift.cluster()}"
             //Login to create ~/.kube/config
             stage("Login") {
-              sh "oc login \'${openshift.cluster()}\' -u system:admin"
+              sh "oc login \'${openshift.cluster()}\' -u system:admin  --insecure-skip-tls-verify"
             }
             stage("Test") {
               sh "mvn -B clean test"
