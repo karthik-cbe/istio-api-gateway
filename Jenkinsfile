@@ -10,12 +10,12 @@ node("mavennexusistio") {
     sh "mvn -B clean test"
   }
 
-  stage("Build Image") {
-    sh "mvn -DskipTests clean fabric8:resource fabric8:build"
+  stage("Build Image and App") {
+    sh "mvn -DskipTests clean package"
   }
 
   stage("Deploy App to OpenShift") {
-    sh "mvn -DskipTests package"
+    sh "kubectl apply -f src/istio/istio-api-gateway-all.yaml"
   }
 
 }
