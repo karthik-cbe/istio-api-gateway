@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<project name="istio-api-gateway">
+   
+    <property name="isto-dest-dir" value="${base_dir}/src/istio"/>
+
+    <target name="merge">
+       <concat destfile="${basedir}/src/istio/api-gateway-all.yml">
+           <fileset dir="${basedir}/target/classes/META-INF/fabric8/kubernetes" includes="*.yml"/>
+           <fileset dir="${basedir}/target/classes/META-INF/fabric8/openshift" includes="*-route.yml"/>
+       </concat>
+    </target>
+
+    <target name="istioctl" depends="merge">
+         <echo message="Running istioctl"/>
+         <exec dir="${isto-dest-dir}" executable="istioctl">
+            <arg line="kube-inject -f api-gateway-all.yml -o istio-api-gateway-all.yml"/>
+         </exec>
+    </target>
+
+</project>

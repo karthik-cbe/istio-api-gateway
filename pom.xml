@@ -21,7 +21,7 @@
 
   <groupId>com.redhat.developers.msa.api-gateway</groupId>
   <artifactId>api-gateway</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Istio Demos:: Api-Gateway</name>
@@ -40,10 +40,11 @@
     <io.opentracing.version>0.22.0</io.opentracing.version>
 
     <!-- fabric8 version -->
-    <fabric8-maven-plugin.version>3.5.22</fabric8-maven-plugin.version>
+    <fabric8-maven-plugin.version>3.5.33</fabric8-maven-plugin.version>
 
     <!-- The docker image name -->
-    <fabric8.generator.name>${project.artifactId}:${project.version}</fabric8.generator.name>
+    <fabric8.generator.name>kameshsampath/${project.artifactId}:${project.version}</fabric8.generator.name>
+    <fabric8.mode>kubernetes</fabric8.mode>
 
   </properties>
 
@@ -162,57 +163,32 @@
         <executions>
           <execution>
             <goals>
+              <goal>resource</goal>
               <goal>build</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
 
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.6.0</version>
+       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
         <executions>
           <execution>
+            <id>istioctl</id>
             <phase>package</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <executable>istioctl</executable>
-          <workingDirectory>${project.build.directory}/istio</workingDirectory>
-          <arguments>
-            <argument>kube-inject</argument>
-            <argument>-f</argument>
-            <argument>${project.artifactId}.yaml</argument>
-            <argument>-o</argument>
-            <argument>istio-${project.artifactId}.yaml</argument>
-          </arguments>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>add-resource</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>add-resource</goal>
-            </goals>
             <configuration>
-              <resources>
-                <resource>
-                  <directory>src/istio</directory>
-                  <targetPath>${project.build.directory}/istio</targetPath>
-                  <filtering>true</filtering>
-                </resource>
-              </resources>
+              <target>
+                <property name="base_dir" value="${basedir}"/>
+                <ant antfile="${basedir}/istio-build.xml">
+                  <target name="istioctl"/>
+                </ant>
+              </target>
             </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
