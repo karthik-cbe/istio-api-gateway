@@ -4,9 +4,17 @@ node("mavennexusistio") {
       timeout(time: 20, unit: 'MINUTES') {
         openshift.withCluster() {
           def workspace = pwd()
+          def token =  sh (
+              script: '/run/secrets/kubernetes.io/serviceaccount/token',
+              returnStdout: true
+          ).trim()
           // Select the default project
           openshift.withProject() {
             echo "Using project ${openshift.project()} in cluster with url ${openshift.cluster()}"
+            //Login to create ~/.kube/config
+            stage("Login") {
+              sh "oc login --token=\'${token}\'"
+            }
             stage("Test") {
               sh "mvn -B clean test"
             }
