@@ -2,8 +2,8 @@ node("mavennexusistio") {
   checkout scm
 
   stage("Using Environment") {
-    sh "istioctl version"
     sh "kubectl cluster-info"
+    sh "istioctl version"    
   }
 
   // stage("Test") {
