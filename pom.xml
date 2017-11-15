@@ -44,7 +44,7 @@
 
     <!-- The docker image name -->
     <fabric8.generator.name>kameshsampath/${project.artifactId}:${project.version}</fabric8.generator.name>
-    <fabric8.mode>kubernetes</fabric8.mode>
+    <!-- fabric8.mode>kubernetes</fabric8.mode -->
 
   </properties>
 

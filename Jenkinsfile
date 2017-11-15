@@ -1,10 +1,10 @@
 node("mavennexusistio") {
   checkout scm
 
-  stage("Using Environment") {
-    sh "kubectl cluster-info"
-    sh "istioctl --help"    
-  }
+  // stage("Using Environment") {
+  //   sh "kubectl cluster-info"
+  //   sh "istioctl --help"    
+  // }
 
   stage("Test") {
     sh "mvn -B clean test"
