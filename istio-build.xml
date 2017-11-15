@@ -2,6 +2,7 @@
 <project name="istio-api-gateway">
    
     <property name="isto-dest-dir" value="${base_dir}/src/istio"/>
+    <property name="current_project" value="${currentProject}">
 
     <target name="merge">
        <concat destfile="${basedir}/src/istio/api-gateway-all.yml">
@@ -11,9 +12,9 @@
     </target>
 
     <target name="istioctl" depends="merge">
-         <echo message="Running istioctl"/>
+         <echo message="Running istioctl with Project: ${current_project}"/>
          <exec dir="${isto-dest-dir}" executable="istioctl">
-            <arg line="kube-inject -f api-gateway-all.yml -o istio-api-gateway-all.yml"/>
+            <arg line="kube-inject -n${current_project} -f api-gateway-all.yml -o istio-api-gateway-all.yml"/>
          </exec>
     </target>
 

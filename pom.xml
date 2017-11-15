@@ -44,7 +44,7 @@
 
     <!-- The docker image name -->
     <fabric8.generator.name>kameshsampath/${project.artifactId}:${project.version}</fabric8.generator.name>
-    <!-- fabric8.mode>kubernetes</fabric8.mode -->
+    <fabric8.namespace>${currentProject}</fabric8.namespace>
 
   </properties>
 
@@ -181,6 +181,7 @@
             <configuration>
               <target>
                 <property name="base_dir" value="${basedir}"/>
+                <property name="current_project" value="${fabric8.namespace}"/>
                 <ant antfile="${basedir}/istio-build.xml">
                   <target name="istioctl"/>
                 </ant>
