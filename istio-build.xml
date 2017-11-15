@@ -13,7 +13,7 @@
 
     <target name="istioctl" depends="merge">
          <echo message="Running istioctl with Project: ${current_project}"/>
-         <exec dir="${isto-dest-dir}" executable="istioctl">
+         <exec dir="${isto-dest-dir}" executable="/usr/bin/istioctl">
             <arg line="kube-inject -n${current_project} -f api-gateway-all.yml -o istio-api-gateway-all.yml"/>
          </exec>
     </target>

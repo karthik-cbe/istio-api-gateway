@@ -3,6 +3,7 @@ node("mavennexusistio") {
   try {
       timeout(time: 20, unit: 'MINUTES') {
         openshift.withCluster() {
+          def workspace = pwd()
           // Select the default project
           openshift.withProject() {
             echo "Using project ${openshift.project()} in cluster with url ${openshift.cluster()}"
@@ -13,7 +14,7 @@ node("mavennexusistio") {
               sh "mvn -DcurrentProject=${openshift.project()} -DskipTests clean package"
             }
             stage("Deploy App to OpenShift") {
-              sh "kubectl apply -f src/istio/istio-api-gateway-all.yaml"
+              sh "kubectl apply -f ${workspace}/src/istio/istio-api-gateway-all.yaml"
             }
           }
         }
