@@ -1,16 +1,21 @@
-node("mavenwithnexus") {
+node("mavennexusistio") {
   checkout scm
 
-  stage("Test") {
-    sh "mvn test"
+  stage("Using Environment") {
+    sh "istioctl version"
+    sh "kubectl cluster-info"
   }
 
-  stage("Build Image") {
-    sh "mvn -DskipTests clean fabric8:build"
-  }
+  // stage("Test") {
+  //   sh "mvn -B clean test"
+  // }
 
-  stage("Deploy App") {
-    sh "mvn -DskipTests clean fabric8:build"
-  }
-  
+  // stage("Build Image") {
+  //   sh "mvn -DskipTests clean fabric8:build"
+  // }
+
+  // stage("Deploy App to OpenShift") {
+  //   sh "mvn -DskipTests clean fabric8:build"
+  // }
+
 }
