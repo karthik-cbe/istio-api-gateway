@@ -2,7 +2,7 @@
 <project name="istio-api-gateway">
    
     <property name="isto-dest-dir" value="${base_dir}/src/istio"/>
-    <property name="current_project" value="${currentProject}">
+    <property name="current_project" value="${currentProject}"/>
 
     <target name="merge">
        <concat destfile="${basedir}/src/istio/api-gateway-all.yml">
