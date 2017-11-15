@@ -1,10 +1,12 @@
 node("mavennexusistio") {
   checkout scm
 
-  // stage("Using Environment") {
-  //   sh "kubectl cluster-info"
-  //   sh "istioctl --help"    
-  // }
+  openshift.withCluster() {
+    // Select the default project
+    openshift.withProject() {
+      echo "Using project ${openshift.project()} in cluster with url ${openshift.cluster()}"
+    }
+  }
 
   stage("Test") {
     sh "mvn -B clean test"
